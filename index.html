@@ -23,13 +23,14 @@
       <a href="#" class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-600 to-teal-400 flex items-center justify-center text-white font-bold">IA</div>
         <div>
-          <div class="text-lg font-semibold">Quỹ Mô phỏng</div>
+          <div class="text-lg font-semibold">Y&T Capital</div>
           <div class="text-xs text-gray-500 dark:text-gray-400">Investment Analytics • Prototype</div>
         </div>
       </a>
       <nav class="hidden md:flex items-center gap-2 text-sm" role="tablist" aria-label="Main Tabs">
         <button data-tab="overview" class="tab-btn px-3 py-2 rounded-md border-b-2 border-transparent" role="tab">Tổng quan</button>
         <button data-tab="screener" class="tab-btn px-3 py-2 rounded-md border-b-2 border-transparent" role="tab">Bộ lọc cổ phiếu</button>
+        <button data-tab="analysis" class="tab-btn px-3 py-2 rounded-md border-b-2 border-transparent" role="tab">Phân tích Doanh nghiệp</button>
         <button data-tab="reports" class="tab-btn px-3 py-2 rounded-md border-b-2 border-transparent" role="tab">Báo cáo & Phân tích</button>
         <button data-tab="watchlist" class="tab-btn px-3 py-2 rounded-md border-b-2 border-transparent" role="tab">Theo dõi</button>
         <button data-tab="portfolio" class="tab-btn px-3 py-2 rounded-md border-b-2 border-transparent" role="tab">Danh mục của tôi</button>
@@ -39,11 +40,11 @@
         <button class="text-sm px-3 py-2 rounded-md bg-gradient-to-r from-indigo-600 to-teal-400 text-white">Upgrade</button>
       </div>
     </div>
-    <!-- Mobile tabs -->
     <div class="md:hidden border-t border-gray-200 dark:border-gray-800 bg-white/60 dark:bg-gray-900/60">
       <div class="max-w-7xl mx-auto px-4 py-2 flex gap-2 overflow-x-auto">
         <button data-tab="overview" class="tab-btn px-3 py-2 rounded-md text-sm">Tổng quan</button>
         <button data-tab="screener" class="tab-btn px-3 py-2 rounded-md text-sm">Bộ lọc</button>
+        <button data-tab="analysis" class="tab-btn px-3 py-2 rounded-md text-sm">Phân tích</button>
         <button data-tab="reports" class="tab-btn px-3 py-2 rounded-md text-sm">Báo cáo</button>
         <button data-tab="watchlist" class="tab-btn px-3 py-2 rounded-md text-sm">Theo dõi</button>
         <button data-tab="portfolio" class="tab-btn px-3 py-2 rounded-md text-sm">Danh mục</button>
@@ -52,8 +53,6 @@
   </header>
 
   <main class="max-w-7xl mx-auto px-6 py-8">
-    <!-- Sections -->
-    <!-- Overview -->
     <section id="overviewSection" class="tab-section">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         <div class="lg:col-span-2">
@@ -148,7 +147,6 @@
       </div>
     </section>
 
-    <!-- Screener -->
     <section id="screenerSection" class="tab-section hidden">
       <div class="glass p-6 rounded-2xl shadow mb-6">
         <h2 class="text-xl font-semibold">Bộ lọc cổ phiếu</h2>
@@ -194,7 +192,76 @@
       </div>
     </section>
 
-    <!-- Reports -->
+    <section id="analysisSection" class="tab-section hidden">
+      <div class="glass p-6 rounded-2xl shadow mb-6">
+        <h2 class="text-xl font-bold" id="analysisTitle">Phân tích Doanh nghiệp</h2>
+        <p class="text-sm text-gray-500">Báo cáo phân tích chuyên sâu (dữ liệu tĩnh).</p>
+      </div>
+      <div id="analysisContent">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 space-y-6">
+            <div class="glass p-6 rounded-2xl shadow">
+              <h3 class="text-xl font-semibold">VIC - Tập đoàn Vingroup</h3>
+              <p class="mt-2 text-sm text-gray-700 dark:text-gray-200">
+                Vingroup là một trong những tập đoàn kinh tế tư nhân đa ngành hàng đầu Việt Nam, tập trung vào ba lĩnh vực cốt lõi: Công nghệ, Công nghiệp và Thương mại Dịch vụ. VIC có ảnh hưởng lớn đến thị trường chứng khoán Việt Nam.
+              </p>
+              <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
+                <div><span class="text-gray-500">Market Cap:</span> <span class="font-medium">500,000 tỷ VND</span></div>
+                <div><span class="text-gray-500">Ngành:</span> <span class="font-medium">Bất động sản & Công nghệ</span></div>
+                <div><span class="text-gray-500">Giá trị nội tại:</span> <span class="font-medium">~125,000 VND</span></div>
+                <div><span class="text-gray-500">Khuyến nghị:</span> <span class="font-medium text-green-500">Hold</span></div>
+              </div>
+            </div>
+
+            <div class="glass p-6 rounded-2xl shadow">
+              <h3 class="text-xl font-semibold">Phân tích Cơ bản</h3>
+              <p class="mt-2 text-sm text-gray-500">Biểu đồ thể hiện ROE (hiệu quả sử dụng vốn) và tăng trưởng doanh thu trong 5 năm gần nhất.</p>
+              <img src="https://via.placeholder.com/800x400.png?text=Fundamental+Chart" alt="Biểu đồ phân tích cơ bản" class="mt-4 w-full rounded-lg" />
+              <div class="mt-4 text-sm">
+                <h4 class="font-medium">Nhận định:</h4>
+                <p class="text-gray-700 dark:text-gray-200">
+                  Hiệu quả ROE của VIC trong những năm gần đây có dấu hiệu biến động do các khoản đầu tư lớn vào các dự án mới như VinFast. Tuy nhiên, doanh thu vẫn duy trì tốc độ tăng trưởng ổn định. Điều này cho thấy tiềm năng dài hạn của tập đoàn.
+                </p>
+              </div>
+            </div>
+
+            <div class="glass p-6 rounded-2xl shadow">
+              <h3 class="text-xl font-semibold">Phân tích Kỹ thuật</h3>
+              <p class="mt-2 text-sm text-gray-500">Biểu đồ nến của VIC với các chỉ báo kỹ thuật quan trọng.</p>
+              <img src="https://via.placeholder.com/800x400.png?text=Technical+Chart" alt="Biểu đồ phân tích kỹ thuật" class="mt-4 w-full rounded-lg" />
+              <div class="mt-4 text-sm">
+                <h4 class="font-medium">Nhận định:</h4>
+                <p class="text-gray-700 dark:text-gray-200">
+                  Giá cổ phiếu VIC đang giao dịch trong một kênh xu hướng đi ngang. Vùng giá 115,000 là mức hỗ trợ cứng, trong khi 130,000 là mức kháng cự mạnh. Một sự bứt phá khỏi một trong hai vùng này có thể báo hiệu một xu hướng mới.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="space-y-6">
+            <div class="glass p-6 rounded-2xl shadow">
+              <h4 class="font-semibold">Tín hiệu Gần đây</h4>
+              <ul class="mt-3 text-sm space-y-2">
+                <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-blue-500"></span><span class="text-gray-700 dark:text-gray-200">MACD cắt lên (tín hiệu mua)</span></li>
+                <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-yellow-500"></span><span class="text-gray-700 dark:text-gray-200">Giá chạm đường SMA-50</span></li>
+                <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-500"></span><span class="text-gray-700 dark:text-gray-200">Khối lượng giao dịch giảm</span></li>
+              </ul>
+            </div>
+            <div class="glass p-6 rounded-2xl shadow">
+              <h4 class="font-semibold">Mô hình Định giá</h4>
+              <div class="mt-3 text-sm space-y-2">
+                <p><span class="text-gray-500">Mức giá mục tiêu:</span> <span class="font-bold text-lg">135,000 VND</span></p>
+                <p><span class="text-gray-500">Giá trị hiện tại:</span> 128,500 VND</p>
+                <p><span class="text-gray-500">Chiết khấu:</span> -4.1%</p>
+              </div>
+              <div class="mt-4">
+                <p class="text-sm">Bạn có thể điều chỉnh các biến số (tăng trưởng, chiết khấu) để tự định giá.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="reportsSection" class="tab-section hidden">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 glass p-6 rounded-2xl shadow">
@@ -234,7 +301,6 @@
       </div>
     </section>
 
-    <!-- Watchlist -->
     <section id="watchlistSection" class="tab-section hidden">
       <div class="glass p-6 rounded-2xl shadow mb-6">
         <h2 class="text-xl font-semibold">Theo dõi</h2>
@@ -257,7 +323,6 @@
       </div>
     </section>
 
-    <!-- Portfolio -->
     <section id="portfolioSection" class="tab-section hidden">
       <div class="glass p-6 rounded-2xl shadow mb-6">
         <h2 class="text-xl font-semibold">Danh mục của tôi</h2>
@@ -298,7 +363,6 @@
       </div>
     </section>
 
-    <!-- Report modal -->
     <div id="reportModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4">
       <div class="bg-white dark:bg-gray-800 rounded-lg max-w-3xl w-full p-6">
         <div class="flex items-center justify-between">
@@ -325,6 +389,7 @@ document.getElementById('updatedTime').innerText = new Date().toLocaleString('vi
   const sections = {
     overview: document.getElementById('overviewSection'),
     screener: document.getElementById('screenerSection'),
+    analysis: document.getElementById('analysisSection'),
     reports: document.getElementById('reportsSection'),
     watchlist: document.getElementById('watchlistSection'),
     portfolio: document.getElementById('portfolioSection')
@@ -345,6 +410,12 @@ document.getElementById('updatedTime').innerText = new Date().toLocaleString('vi
   }
   tabs.forEach(t=> t.addEventListener('click', ()=> showTab(t.dataset.tab)));
   showTab('overview');
+  // Chức năng chuyển tab từ screener
+  window.showAnalysisForTicker = function(ticker) {
+    document.getElementById('analysisTitle').innerText = 'Phân tích Doanh nghiệp: ' + ticker;
+    showTab('analysis');
+    // Ở đây bạn có thể thêm logic để hiển thị nội dung phân tích chi tiết của từng mã cổ phiếu (nếu có)
+  };
 })();
 
 // Market Chart
@@ -419,12 +490,12 @@ function buildTable(rows){
       <td class="px-4 py-2 text-right">${r.pe.toFixed(1)}</td>
       <td class="px-4 py-2 text-right">${r.roe.toFixed(1)}%</td>
       <td class="px-4 py-2 text-right">${(r.marketCap).toLocaleString()}</td>
-      <td class="px-4 py-2"><button class="text-indigo-600 view-btn" data-ticker="${r.ticker}">View</button></td>
+      <td class="px-4 py-2"><button class="text-indigo-600 view-btn" data-ticker="${r.ticker}">Xem phân tích</button></td>
     `;
     tbody.appendChild(tr);
   });
   // attach view handlers
-  document.querySelectorAll('.view-btn').forEach(b=> b.addEventListener('click', (e)=> alert('View details for '+e.target.dataset.ticker)));
+  document.querySelectorAll('.view-btn').forEach(b=> b.addEventListener('click', (e)=> window.showAnalysisForTicker(e.target.dataset.ticker)));
 }
 
 document.getElementById('runScreenerBtn').addEventListener('click', ()=>{
