@@ -395,7 +395,7 @@ document.querySelectorAll('th[data-tooltip]').forEach(th => {
 // Screener mock with loading state & modal
   let mockStocks = [];
 
-fetch("https://raw.githubusercontent.com/YT-Capital/YT-Captital.data/refs/heads/main/stocks.json")
+fetch("https://raw.githubusercontent.com/YT-Capital/YT-Capital.data/main/stocks.json")
   .then(res => res.json())
   .then(data => {
     mockStocks = data;
