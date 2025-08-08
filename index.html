@@ -3,24 +3,23 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Investment Analytics — Solid State Theme</title>
+  <title>Investment Analytics — Prototype (Tabbed)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    /* Inspired by HTML5UP Solid State + Tailwind utility mix */
     :root{--accent:linear-gradient(90deg,#4f46e5,#06b6d4);} 
     body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;}
-    .hero-bg{background:radial-gradient(ellipse at top left, rgba(79,70,229,0.08), transparent 20%), radial-gradient(ellipse at bottom right, rgba(6,182,212,0.06), transparent 20%);} 
+    .hero-bg{background:radial-gradient(ellipse at top left, rgba(79,70,229,0.06), transparent 20%), radial-gradient(ellipse at bottom right, rgba(6,182,212,0.04), transparent 20%);} 
     .glass{backdrop-filter: blur(6px); background-color: rgba(255,255,255,0.6);} 
     @media (prefers-color-scheme: dark){
       .glass{background-color: rgba(17,24,39,0.5);}
     }
+    .fade-enter{opacity:0;transform:translateY(6px)} .fade-enter-active{opacity:1;transform:none;transition:all .28s ease-out}
   </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-  <!-- Header / Nav modeled after Solid State -->
   <header class="hero-bg border-b border-gray-200 dark:border-gray-800">
-    <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <a href="#" class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-600 to-teal-400 flex items-center justify-center text-white font-bold">IA</div>
         <div>
@@ -28,198 +27,482 @@
           <div class="text-xs text-gray-500 dark:text-gray-400">Investment Analytics • Prototype</div>
         </div>
       </a>
-      <nav class="hidden md:flex items-center gap-4 text-sm">
-        <a href="#dashboard" class="py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">Dashboard</a>
-        <a href="#screener" class="py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">Screener</a>
-        <a href="#models" class="py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">Model Portfolios</a>
-        <a href="#reports" class="py-2 px-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">Reports</a>
+      <nav class="hidden md:flex items-center gap-2 text-sm" role="tablist" aria-label="Main Tabs">
+        <button data-tab="overview" class="tab-btn px-3 py-2 rounded-md border-b-2 border-transparent" role="tab">Tổng quan</button>
+        <button data-tab="screener" class="tab-btn px-3 py-2 rounded-md border-b-2 border-transparent" role="tab">Bộ lọc cổ phiếu</button>
+        <button data-tab="reports" class="tab-btn px-3 py-2 rounded-md border-b-2 border-transparent" role="tab">Báo cáo & Phân tích</button>
+        <button data-tab="watchlist" class="tab-btn px-3 py-2 rounded-md border-b-2 border-transparent" role="tab">Theo dõi</button>
+        <button data-tab="portfolio" class="tab-btn px-3 py-2 rounded-md border-b-2 border-transparent" role="tab">Danh mục của tôi</button>
       </nav>
       <div class="flex items-center gap-3">
-        <button class="text-sm px-3 py-2 rounded-md border border-gray-200 dark:border-gray-700">Sign In</button>
+        <button id="themeToggle" class="text-sm px-3 py-2 rounded-md border border-gray-200 dark:border-gray-700">Theme</button>
         <button class="text-sm px-3 py-2 rounded-md bg-gradient-to-r from-indigo-600 to-teal-400 text-white">Upgrade</button>
+      </div>
+    </div>
+    <!-- Mobile tabs -->
+    <div class="md:hidden border-t border-gray-200 dark:border-gray-800 bg-white/60 dark:bg-gray-900/60">
+      <div class="max-w-7xl mx-auto px-4 py-2 flex gap-2 overflow-x-auto">
+        <button data-tab="overview" class="tab-btn px-3 py-2 rounded-md text-sm">Tổng quan</button>
+        <button data-tab="screener" class="tab-btn px-3 py-2 rounded-md text-sm">Bộ lọc</button>
+        <button data-tab="reports" class="tab-btn px-3 py-2 rounded-md text-sm">Báo cáo</button>
+        <button data-tab="watchlist" class="tab-btn px-3 py-2 rounded-md text-sm">Theo dõi</button>
+        <button data-tab="portfolio" class="tab-btn px-3 py-2 rounded-md text-sm">Danh mục</button>
       </div>
     </div>
   </header>
 
-  <!-- Main layout similar to Solid State's big-landing layout -->
-  <main class="max-w-7xl mx-auto px-6 py-10">
-    <!-- Hero / Overview -->
-    <section id="dashboard" class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-      <div class="lg:col-span-2">
-        <div class="glass rounded-2xl p-6 shadow-md">
-          <div class="flex items-start justify-between">
-            <div>
-              <h1 class="text-2xl font-bold">Tổng quan thị trường</h1>
-              <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Dashboard theo phong cách Solid State — hiển thị nhanh các chỉ số và biểu đồ thị trường.</p>
+  <main class="max-w-7xl mx-auto px-6 py-8">
+    <!-- Sections -->
+    <!-- Overview -->
+    <section id="overviewSection" class="tab-section">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div class="lg:col-span-2">
+          <div class="glass rounded-2xl p-6 shadow-md">
+            <div class="flex items-start justify-between">
+              <div>
+                <h1 class="text-2xl font-bold">Tổng quan thị trường</h1>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Snapshot các chỉ số chính và biểu đồ xu hướng.</p>
+              </div>
+              <div class="text-sm text-gray-500">Updated: <span id="updatedTime">--</span></div>
             </div>
-            <div class="text-sm text-gray-500">Updated: <span id="updatedTime">--</span></div>
+
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="p-4 rounded-xl bg-white dark:bg-gray-800 shadow-sm">
+                <div class="text-xs text-gray-500">VN-Index</div>
+                <div class="text-xl font-semibold" id="vnIndexVal">1,234.56</div>
+                <div class="text-sm text-green-500">+1.2% (24h)</div>
+              </div>
+              <div class="p-4 rounded-xl bg-white dark:bg-gray-800 shadow-sm">
+                <div class="text-xs text-gray-500">S&P 500</div>
+                <div class="text-xl font-semibold" id="spVal">4,567</div>
+                <div class="text-sm text-red-500">-0.3% (24h)</div>
+              </div>
+              <div class="p-4 rounded-xl bg-white dark:bg-gray-800 shadow-sm">
+                <div class="text-xs text-gray-500">USD/VND</div>
+                <div class="text-xl font-semibold" id="fxVal">23,600</div>
+                <div class="text-sm text-green-500">+0.1% (24h)</div>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <div class="flex items-center gap-3">
+                <div class="text-sm">Khung thời gian:</div>
+                <div class="flex gap-2">
+                  <button class="time-btn px-2 py-1 rounded-md text-sm border" data-interval="1D">1D</button>
+                  <button class="time-btn px-2 py-1 rounded-md text-sm border" data-interval="1W">1W</button>
+                  <button class="time-btn px-2 py-1 rounded-md text-sm border" data-interval="1M">1M</button>
+                  <button class="time-btn px-2 py-1 rounded-md text-sm border" data-interval="1Y">1Y</button>
+                </div>
+                <div class="ml-auto">
+                  <label class="text-sm mr-2">Loại biểu đồ:</label>
+                  <select id="chartType" class="rounded-md p-1 text-sm border">
+                    <option value="line">Line</option>
+                    <option value="bar">Bar</option>
+                    <option value="doughnut">Doughnut</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mt-4">
+                <canvas id="marketChart" height="140"></canvas>
+              </div>
+            </div>
           </div>
 
           <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="p-4 rounded-xl bg-white dark:bg-gray-800 shadow-sm">
-              <div class="text-xs text-gray-500">VN-Index</div>
-              <div class="text-xl font-semibold">1,234.56</div>
-              <div class="text-sm text-green-500">+1.2% (24h)</div>
+            <div class="p-4 bg-white dark:bg-gray-800 rounded-2xl shadow">
+              <h3 class="font-semibold">Model: Growth</h3>
+              <p class="text-sm text-gray-500">5 holdings • Focus on revenue growth</p>
+              <div class="mt-3 text-lg font-bold">+12.4% YTD</div>
             </div>
-            <div class="p-4 rounded-xl bg-white dark:bg-gray-800 shadow-sm">
-              <div class="text-xs text-gray-500">S&P 500</div>
-              <div class="text-xl font-semibold">4,567</div>
-              <div class="text-sm text-red-500">-0.3% (24h)</div>
+            <div class="p-4 bg-white dark:bg-gray-800 rounded-2xl shadow">
+              <h3 class="font-semibold">Model: Value</h3>
+              <p class="text-sm text-gray-500">7 holdings • Value picks</p>
+              <div class="mt-3 text-lg font-bold">+6.8% YTD</div>
             </div>
-            <div class="p-4 rounded-xl bg-white dark:bg-gray-800 shadow-sm">
-              <div class="text-xs text-gray-500">USD/VND</div>
-              <div class="text-xl font-semibold">23,600</div>
-              <div class="text-sm text-green-500">+0.1% (24h)</div>
+            <div class="p-4 bg-white dark:bg-gray-800 rounded-2xl shadow">
+              <h3 class="font-semibold">Model: Balanced</h3>
+              <p class="text-sm text-gray-500">Mix of stocks & bonds</p>
+              <div class="mt-3 text-lg font-bold">+8.9% YTD</div>
             </div>
-          </div>
-
-          <div class="mt-6">
-            <canvas id="marketChart" height="140"></canvas>
           </div>
         </div>
 
-        <!-- Model portfolios section -->
-        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="p-4 bg-white dark:bg-gray-800 rounded-2xl shadow">
-            <h3 class="font-semibold">Model: Growth</h3>
-            <p class="text-sm text-gray-500">5 holdings • Focus on revenue growth</p>
-            <div class="mt-3 text-lg font-bold">+12.4% YTD</div>
+        <aside class="space-y-6">
+          <div class="glass p-4 rounded-2xl shadow">
+            <h4 class="font-semibold">Tin tức nhanh</h4>
+            <ul class="mt-3 text-sm space-y-2" id="newsList">
+              <li>● GDP Q2 tăng, tác động đến dòng tiền</li>
+              <li>● VIC đạt target, trader chú ý</li>
+              <li>● Cập nhật tỷ giá USD/VND</li>
+            </ul>
           </div>
-          <div class="p-4 bg-white dark:bg-gray-800 rounded-2xl shadow">
-            <h3 class="font-semibold">Model: Value</h3>
-            <p class="text-sm text-gray-500">7 holdings • Value picks</p>
-            <div class="mt-3 text-lg font-bold">+6.8% YTD</div>
+
+          <div class="glass p-4 rounded-2xl shadow">
+            <h4 class="font-semibold">Quick actions</h4>
+            <div class="mt-3 grid grid-cols-1 gap-2">
+              <button class="py-2 rounded-md border border-gray-200 dark:border-gray-700">Export CSV</button>
+              <button class="py-2 rounded-md border border-gray-200 dark:border-gray-700">Generate Report</button>
+            </div>
           </div>
-          <div class="p-4 bg-white dark:bg-gray-800 rounded-2xl shadow">
-            <h3 class="font-semibold">Model: Balanced</h3>
-            <p class="text-sm text-gray-500">Mix of stocks & bonds</p>
-            <div class="mt-3 text-lg font-bold">+8.9% YTD</div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Screener -->
+    <section id="screenerSection" class="tab-section hidden">
+      <div class="glass p-6 rounded-2xl shadow mb-6">
+        <h2 class="text-xl font-semibold">Bộ lọc cổ phiếu</h2>
+        <p class="text-sm text-gray-500">Nhập tiêu chí để lọc (dữ liệu mô phỏng).</p>
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+          <div>
+            <label class="block text-gray-600 dark:text-gray-300 text-sm">P/E ≤</label>
+            <input id="peInput" type="number" class="mt-1 w-full rounded-md border-gray-200 dark:border-gray-700 p-2 bg-transparent" placeholder="e.g. 15" />
+          </div>
+          <div>
+            <label class="block text-gray-600 dark:text-gray-300 text-sm">ROE ≥</label>
+            <input id="roeInput" type="number" class="mt-1 w-full rounded-md border-gray-200 dark:border-gray-700 p-2 bg-transparent" placeholder="e.g. 15" />
+          </div>
+          <div>
+            <label class="block text-gray-600 dark:text-gray-300 text-sm">Sector</label>
+            <select id="sectorInput" class="mt-1 w-full rounded-md border-gray-200 dark:border-gray-700 p-2 bg-transparent text-sm">
+              <option value="">All</option><option>Finance</option><option>IT</option><option>Retail</option><option>Real Estate</option>
+            </select>
+          </div>
+          <div class="flex gap-2">
+            <button id="runScreenerBtn" class="w-full py-2 rounded-md bg-gradient-to-r from-indigo-600 to-teal-400 text-white">Run</button>
+            <button id="resetScreenerBtn" class="w-full py-2 rounded-md border border-gray-200 dark:border-gray-700">Reset</button>
           </div>
         </div>
       </div>
 
-      <!-- Right column: screener & alerts -->
-      <aside class="space-y-6">
-        <div class="glass p-4 rounded-2xl shadow">
-          <h4 class="font-semibold">Screener nhanh</h4>
-          <form class="mt-3 space-y-3 text-sm">
-            <div>
-              <label class="block text-gray-600 dark:text-gray-300">P/E ≤</label>
-              <input type="number" class="mt-1 w-full rounded-md border-gray-200 dark:border-gray-700 p-2 bg-transparent" placeholder="e.g. 15" />
-            </div>
-            <div>
-              <label class="block text-gray-600 dark:text-gray-300">ROE ≥</label>
-              <input type="number" class="mt-1 w-full rounded-md border-gray-200 dark:border-gray-700 p-2 bg-transparent" placeholder="e.g. 15" />
-            </div>
-            <button type="button" class="w-full py-2 rounded-md bg-gradient-to-r from-indigo-600 to-teal-400 text-white">Run</button>
-          </form>
+      <div class="glass rounded-2xl p-4 shadow">
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm" aria-label="Screener results">
+            <thead class="text-left text-gray-500">
+              <tr>
+                <th class="px-4 py-2">Mã</th>
+                <th class="px-4 py-2">Tên</th>
+                <th class="px-4 py-2 text-right">P/E</th>
+                <th class="px-4 py-2 text-right">ROE</th>
+                <th class="px-4 py-2 text-right">Market Cap</th>
+                <th class="px-4 py-2">Hành động</th>
+              </tr>
+            </thead>
+            <tbody id="screenerTbody"></tbody>
+          </table>
         </div>
-
-        <div class="glass p-4 rounded-2xl shadow">
-          <h4 class="font-semibold">Alerts</h4>
-          <ul class="mt-3 text-sm space-y-2">
-            <li class="text-sm">● <span class="font-medium">VIC</span> reached target price 120,000</li>
-            <li class="text-sm">● <span class="font-medium">PNJ</span> earnings beat estimates</li>
-            <li class="text-sm">● <span class="font-medium">USD/VND</span> volatility increased</li>
-          </ul>
-        </div>
-
-        <div class="glass p-4 rounded-2xl shadow">
-          <h4 class="font-semibold">Quick actions</h4>
-          <div class="mt-3 grid grid-cols-1 gap-2">
-            <button class="py-2 rounded-md border border-gray-200 dark:border-gray-700">Export CSV</button>
-            <button class="py-2 rounded-md border border-gray-200 dark:border-gray-700">Generate Report</button>
-          </div>
-        </div>
-      </aside>
+      </div>
     </section>
 
-    <!-- Reports / Features in Solid State style -->
-    <section id="reports" class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-      <div class="lg:col-span-2 glass p-6 rounded-2xl shadow">
-        <h3 class="font-semibold">Recent Reports</h3>
-        <div class="mt-4 space-y-3">
-          <article class="p-4 rounded-lg bg-white dark:bg-gray-800 shadow-sm">
-            <div class="flex items-center justify-between">
-              <div>
-                <h4 class="font-medium">Weekly Market Outlook</h4>
-                <p class="text-xs text-gray-500">Aug 6, 2025 • Macro & Market themes</p>
+    <!-- Reports -->
+    <section id="reportsSection" class="tab-section hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 glass p-6 rounded-2xl shadow">
+          <h3 class="font-semibold">Recent Reports</h3>
+          <div class="mt-4 space-y-3" id="reportsList">
+            <article class="p-4 rounded-lg bg-white dark:bg-gray-800 shadow-sm report-card" data-title="Weekly Market Outlook" data-content="Báo cáo thị trường tuần...">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h4 class="font-medium">Weekly Market Outlook</h4>
+                  <p class="text-xs text-gray-500">Aug 6, 2025 • Macro & Market themes</p>
+                </div>
+                <button class="openReportBtn text-sm text-indigo-600">Open →</button>
               </div>
-              <a href="#" class="text-sm text-indigo-600">Open →</a>
-            </div>
-          </article>
-          <article class="p-4 rounded-lg bg-white dark:bg-gray-800 shadow-sm">
-            <div class="flex items-center justify-between">
-              <div>
-                <h4 class="font-medium">Top 10 Value Picks</h4>
-                <p class="text-xs text-gray-500">Aug 1, 2025 • Fundamental screen</p>
+            </article>
+            <article class="p-4 rounded-lg bg-white dark:bg-gray-800 shadow-sm report-card" data-title="Top 10 Value Picks" data-content="Top picks based on fundamentals...">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h4 class="font-medium">Top 10 Value Picks</h4>
+                  <p class="text-xs text-gray-500">Aug 1, 2025 • Fundamental screen</p>
+                </div>
+                <button class="openReportBtn text-sm text-indigo-600">Open →</button>
               </div>
-              <a href="#" class="text-sm text-indigo-600">Open →</a>
-            </div>
-          </article>
+            </article>
+          </div>
+        </div>
+
+        <aside class="glass p-6 rounded-2xl shadow">
+          <h4 class="font-semibold">Portfolio Snapshot</h4>
+          <div class="mt-4 text-sm">
+            <p>Nav: <span class="font-semibold">1,020,450,000 VND</span></p>
+            <p class="mt-2">Return YTD: <span class="font-semibold text-green-500">+9.1%</span></p>
+          </div>
+          <div class="mt-4">
+            <canvas id="pieChart" height="180"></canvas>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Watchlist -->
+    <section id="watchlistSection" class="tab-section hidden">
+      <div class="glass p-6 rounded-2xl shadow mb-6">
+        <h2 class="text-xl font-semibold">Theo dõi</h2>
+        <p class="text-sm text-gray-500">Thêm mã bạn muốn theo dõi.</p>
+        <div class="mt-4 flex gap-2">
+          <input id="watchInput" type="text" class="rounded-md p-2 border w-full" placeholder="Nhập mã, ví dụ: VIC" />
+          <button id="addWatchBtn" class="px-4 py-2 rounded-md bg-indigo-600 text-white">Thêm</button>
         </div>
       </div>
 
-      <aside class="glass p-6 rounded-2xl shadow">
-        <h4 class="font-semibold">Portfolio Snapshot</h4>
-        <div class="mt-4 text-sm">
-          <p>Nav: <span class="font-semibold">1,020,450,000 VND</span></p>
-          <p class="mt-2">Return YTD: <span class="font-semibold text-green-500">+9.1%</span></p>
+      <div class="glass rounded-2xl p-4 shadow">
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm">
+            <thead class="text-left text-gray-500">
+              <tr><th class="px-4 py-2">Mã</th><th class="px-4 py-2">Giá</th><th class="px-4 py-2">% Thay đổi</th><th class="px-4 py-2">Hành động</th></tr>
+            </thead>
+            <tbody id="watchlistTbody"></tbody>
+          </table>
         </div>
-        <div class="mt-4">
-          <canvas id="pieChart" height="180"></canvas>
-        </div>
-      </aside>
+      </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="text-center text-sm text-gray-500 py-8">
-      <div>Prototype — Không phải lời khuyên đầu tư. Mẫu lấy cảm hứng từ Solid State (HTML5UP).</div>
-    </footer>
+    <!-- Portfolio -->
+    <section id="portfolioSection" class="tab-section hidden">
+      <div class="glass p-6 rounded-2xl shadow mb-6">
+        <h2 class="text-xl font-semibold">Danh mục của tôi</h2>
+        <p class="text-sm text-gray-500">Thêm cổ phiếu bạn đang nắm để theo dõi lợi nhuận.</p>
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+          <div>
+            <label class="block text-sm">Mã</label>
+            <input id="pfTicker" type="text" class="mt-1 rounded-md p-2 border w-full" placeholder="VIC" />
+          </div>
+          <div>
+            <label class="block text-sm">Số lượng</label>
+            <input id="pfQty" type="number" class="mt-1 rounded-md p-2 border w-full" placeholder="100" />
+          </div>
+          <div>
+            <label class="block text-sm">Giá mua</label>
+            <input id="pfPrice" type="number" class="mt-1 rounded-md p-2 border w-full" placeholder="10000" />
+          </div>
+        </div>
+        <div class="mt-4"><button id="addPfBtn" class="px-4 py-2 rounded-md bg-indigo-600 text-white">Thêm vào danh mục</button></div>
+      </div>
+
+      <div class="glass rounded-2xl p-4 shadow">
+        <h3 class="font-semibold">Tổng quan danh mục</h3>
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+          <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+            <div class="text-sm">Nav</div>
+            <div class="text-lg font-bold" id="pfNav">0 VND</div>
+          </div>
+          <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+            <div class="text-sm">P/L</div>
+            <div class="text-lg font-bold" id="pfPL">0 VND</div>
+          </div>
+          <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+            <div class="text-sm">YTD</div>
+            <div class="text-lg font-bold" id="pfYTD">0%</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Report modal -->
+    <div id="reportModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4">
+      <div class="bg-white dark:bg-gray-800 rounded-lg max-w-3xl w-full p-6">
+        <div class="flex items-center justify-between">
+          <h3 class="modal-title font-semibold">Report title</h3>
+          <button id="closeModal" class="text-sm">Close</button>
+        </div>
+        <div class="modal-body mt-4 text-sm text-gray-700 dark:text-gray-200">Report content here.</div>
+      </div>
+    </div>
+
   </main>
 
-  <!-- Scripts: small mock data for charts -->
-  <script>
-    // Update time
-    document.getElementById('updatedTime').innerText = new Date().toLocaleString('vi-VN');
+  <footer class="text-center text-sm text-gray-500 py-8">
+    <div>Prototype — Không phải lời khuyên đầu tư. Mẫu lấy cảm hứng từ Solid State (HTML5UP).</div>
+  </footer>
 
-    // Market line chart
-    const ctx = document.getElementById('marketChart').getContext('2d');
-    const marketChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
-        datasets: [{
-          label: 'VN-Index',
-          data: [1200,1215,1190,1220,1234,1228,1234],
-          tension: 0.3,
-          fill: true,
-          borderWidth: 2
-        },{
-          label: 'S&P 500',
-          data: [4500,4520,4510,4535,4567,4550,4567],
-          tension: 0.3,
-          borderDash: [6,4],
-          borderWidth: 2
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { position: 'top' } },
-        scales: { y: { beginAtZero: false } }
+<script>
+// Update time
+document.getElementById('updatedTime').innerText = new Date().toLocaleString('vi-VN');
+
+// Tab system
+(function(){
+  const tabs = document.querySelectorAll('.tab-btn');
+  const sections = {
+    overview: document.getElementById('overviewSection'),
+    screener: document.getElementById('screenerSection'),
+    reports: document.getElementById('reportsSection'),
+    watchlist: document.getElementById('watchlistSection'),
+    portfolio: document.getElementById('portfolioSection')
+  };
+  function showTab(name){
+    Object.keys(sections).forEach(k=>{
+      const el = sections[k];
+      if(k === name){
+        el.classList.remove('hidden');
+        el.classList.add('fade-enter-active');
+      } else {
+        el.classList.add('hidden');
+        el.classList.remove('fade-enter-active');
       }
     });
+    // active state
+    tabs.forEach(t=> t.classList.toggle('border-b-indigo-600', t.dataset.tab === name));
+  }
+  tabs.forEach(t=> t.addEventListener('click', ()=> showTab(t.dataset.tab)));
+  showTab('overview');
+})();
 
-    // Portfolio pie chart
-    const pctx = document.getElementById('pieChart').getContext('2d');
-    const pieChart = new Chart(pctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Equities','Bonds','Cash'],
-        datasets: [{ data: [65,25,10], hoverOffset: 4 }]
-      },
-      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-    });
-  </script>
+// Market Chart
+const ctx = document.getElementById('marketChart').getContext('2d');
+let marketChart;
+const mockLabels = { '1D':['9:00','10:00','11:00','12:00','13:00','14:00','15:00'], '1W':['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], '1M': ['W1','W2','W3','W4'], '1Y':['Jan','Mar','May','Jul','Sep','Nov'] };
+const mockDataSets = {
+  vn: { data: [1200,1215,1190,1220,1234,1228,1234] },
+  sp: { data: [4500,4520,4510,4535,4567,4550,4567] }
+};
+function createMarketChart(type='line', interval='1W'){
+  if(marketChart) marketChart.destroy();
+  const labels = mockLabels[interval] || mockLabels['1W'];
+  marketChart = new Chart(ctx, {
+    type: type,
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'VN-Index',
+        data: mockDataSets.vn.data.slice(0, labels.length),
+        tension: 0.3,
+        fill: true,
+        borderWidth: 2
+      },{
+        label: 'S&P 500',
+        data: mockDataSets.sp.data.slice(0, labels.length),
+        tension: 0.3,
+        borderDash: [6,4],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive:true,
+      plugins:{legend:{position:'top'}},
+      scales:{y:{beginAtZero:false}}
+    }
+  });
+}
+createMarketChart('line','1W');
+
+// timeframe buttons
+document.querySelectorAll('.time-btn').forEach(b=> b.addEventListener('click', ()=>{
+  const interval = b.dataset.interval;
+  const type = document.getElementById('chartType').value;
+  createMarketChart(type, interval);
+}));
+document.getElementById('chartType').addEventListener('change', (e)=>{
+  const interval = document.querySelector('.time-btn')?.dataset?.interval || '1W';
+  createMarketChart(e.target.value, interval);
+});
+
+// Screener mock
+const mockStocks = [
+  {ticker:'VIC', name:'Vingroup', pe:12.5, roe:18.2, marketCap:50000, sector:'Real Estate'},
+  {ticker:'PNJ', name:'PNJ', pe:16.3, roe:22.1, marketCap:15000, sector:'Retail'},
+  {ticker:'FPT', name:'FPT', pe:14.8, roe:15.0, marketCap:25000, sector:'IT'},
+  {ticker:'HPG', name:'HPG', pe:8.2, roe:12.0, marketCap:30000, sector:'Manufacturing'},
+  {ticker:'SSI', name:'SSI Securities', pe:20.5, roe:8.5, marketCap:8000, sector:'Finance'}
+];
+function buildTable(rows){
+  const tbody = document.getElementById('screenerTbody');
+  tbody.innerHTML = '';
+  if(rows.length === 0){
+    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6">Không có kết quả</td></tr>`;
+    return;
+  }
+  rows.forEach(r=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="px-4 py-2 font-medium">${r.ticker}</td>
+      <td class="px-4 py-2">${r.name}</td>
+      <td class="px-4 py-2 text-right">${r.pe.toFixed(1)}</td>
+      <td class="px-4 py-2 text-right">${r.roe.toFixed(1)}%</td>
+      <td class="px-4 py-2 text-right">${(r.marketCap).toLocaleString()}</td>
+      <td class="px-4 py-2"><button class="text-indigo-600 view-btn" data-ticker="${r.ticker}">View</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  // attach view handlers
+  document.querySelectorAll('.view-btn').forEach(b=> b.addEventListener('click', (e)=> alert('View details for '+e.target.dataset.ticker)));
+}
+
+document.getElementById('runScreenerBtn').addEventListener('click', ()=>{
+  const peMax = parseFloat(document.getElementById('peInput').value) || Infinity;
+  const roeMin = parseFloat(document.getElementById('roeInput').value) || -Infinity;
+  const sector = document.getElementById('sectorInput').value;
+  const results = mockStocks.filter(s => s.pe <= peMax && s.roe >= roeMin && (sector? s.sector === sector: true));
+  buildTable(results);
+});
+document.getElementById('resetScreenerBtn').addEventListener('click', ()=>{
+  document.getElementById('peInput').value=''; document.getElementById('roeInput').value=''; document.getElementById('sectorInput').value='';
+  buildTable(mockStocks);
+});
+// initial screener table
+buildTable(mockStocks);
+
+// Reports modal
+document.querySelectorAll('.openReportBtn').forEach(btn=> btn.addEventListener('click', (e)=>{
+  const art = e.target.closest('.report-card');
+  const title = art.dataset.title; const content = art.dataset.content;
+  document.querySelector('#reportModal .modal-title').innerText = title;
+  document.querySelector('#reportModal .modal-body').innerText = content;
+  document.getElementById('reportModal').classList.remove('hidden');
+}));
+document.getElementById('closeModal').addEventListener('click', ()=> document.getElementById('reportModal').classList.add('hidden'));
+
+// Pie chart for reports sidebar
+const pctx = document.getElementById('pieChart').getContext('2d');
+const pieChart = new Chart(pctx, {
+  type: 'doughnut',
+  data: { labels: ['Equities','Bonds','Cash'], datasets:[{data:[65,25,10], hoverOffset:4}] },
+  options:{responsive:true, plugins:{legend:{position:'bottom'}}}
+});
+
+// Watchlist handlers
+let watchlist = [{ticker:'VIC', price:120000, change:'+1.2%'}, {ticker:'HPG', price:42000, change:'-0.5%'}];
+function renderWatch(){
+  const tbody = document.getElementById('watchlistTbody'); tbody.innerHTML='';
+  watchlist.forEach((w,idx)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="px-4 py-2 font-medium">${w.ticker}</td><td class="px-4 py-2">${w.price.toLocaleString()}</td><td class="px-4 py-2">${w.change}</td><td class="px-4 py-2"><button class="text-red-600 remove-watch" data-idx="${idx}">Remove</button></td>`;
+    tbody.appendChild(tr);
+  });
+  document.querySelectorAll('.remove-watch').forEach(b=> b.addEventListener('click', e=> { watchlist.splice(e.target.dataset.idx,1); renderWatch(); }));
+}
+document.getElementById('addWatchBtn').addEventListener('click', ()=>{
+  const v = document.getElementById('watchInput').value.trim().toUpperCase();
+  if(!v) return alert('Nhập mã hợp lệ');
+  watchlist.unshift({ticker:v, price:10000, change:'+0.0%'});
+  document.getElementById('watchInput').value='';
+  renderWatch();
+});
+renderWatch();
+
+// Portfolio handlers
+let portfolio = [];
+function renderPortfolioSummary(){
+  const nav = portfolio.reduce((s,p)=> s + p.qty * p.price, 0);
+  const pl = 0; // mock
+  document.getElementById('pfNav').innerText = nav.toLocaleString() + ' VND';
+  document.getElementById('pfPL').innerText = pl.toLocaleString ? pl.toLocaleString() : pl + ' VND';
+  document.getElementById('pfYTD').innerText = portfolio.length? '+3.2%':'0%';
+}
+document.getElementById('addPfBtn').addEventListener('click', ()=>{
+  const t = document.getElementById('pfTicker').value.trim().toUpperCase();
+  const q = parseFloat(document.getElementById('pfQty').value) || 0;
+  const p = parseFloat(document.getElementById('pfPrice').value) || 0;
+  if(!t || q<=0 || p<=0) return alert('Vui lòng nhập đầy đủ thông tin hợp lệ');
+  portfolio.push({ticker:t, qty:q, price:p});
+  document.getElementById('pfTicker').value=''; document.getElementById('pfQty').value=''; document.getElementById('pfPrice').value='';
+  renderPortfolioSummary();
+});
+
+// simple theme toggle
+document.getElementById('themeToggle').addEventListener('click', ()=>{
+  document.documentElement.classList.toggle('dark');
+});
+
+</script>
 </body>
 </html>
