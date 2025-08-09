@@ -404,12 +404,16 @@ document.querySelectorAll('th[data-tooltip]').forEach(th => {
 // Screener mock with loading state & modal
   let mockStocks = [];
 
-fetch("stocks.json")
-  .then(res => res.json())
-  .then(data => {
-    mockStocks = data;
-    buildTable(mockStocks);
-  });
+  fetch("stocks.json")
+    .then(res => res.json())
+    .then(data => {
+      mockStocks = data;
+      buildTable(mockStocks); // Hàm này bạn đã có sẵn để render bảng
+    })
+    .catch(error => console.error("Lỗi khi tải dữ liệu stocks.json:", error));
+
+  // Các hàm JS khác của bạn ở đây...
+</script>
 
 function buildTable(rows){
   const tbody = document.getElementById('screenerTbody');
