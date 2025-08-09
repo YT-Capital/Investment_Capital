@@ -419,13 +419,6 @@ function buildTable(rows){
   }
 
 
-function buildTable(rows){
-  const tbody = document.getElementById('screenerTbody');
-  tbody.innerHTML = '';
-  if(rows.length === 0){
-    tbody.innerHTML = `<tr><td colspan="9" class="text-center py-6 text-gray-500">Không có kết quả nào phù hợp</td></tr>`;
-    return;
-  }
   rows.forEach(r=>{
     const tr = document.createElement('tr');
     tr.innerHTML = `
