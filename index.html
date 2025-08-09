@@ -404,7 +404,7 @@ document.querySelectorAll('th[data-tooltip]').forEach(th => {
 // Screener mock with loading state & modal
   let mockStocks = [];
 
-fetch("stocks.json")
+fetch("YT-Capital/Investment_Capital/stocks.json")
   .then(res => res.json())
   .then(data => {
     mockStocks = data;
