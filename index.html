@@ -135,15 +135,6 @@
                class="w-32 h-32 object-cover rounded-full mx-auto">
                         <h4 class="font-bold">Phạm Phương Nga</h4>
                         <p class="text-sm text-gray-500">Co-Founder </p>
-                        <div class="p-4 bg-white dark:bg-gray-800 rounded-xl shadow-sm text-center">
-        <img src="images/AVR001.jpg" 
-             alt="Avatar Nguyễn Nhất Bảo" 
-               class="w-32 h-32 object-cover rounded-full mx-auto">
-                        <h4 class="font-bold">Nguyễn Nhất Bảo</h4>
-                        <p class="text-sm text-gray-500">C0-Founder</p>
-                    </div>
-                </div>
-            </div>
         </div>
       </div>
     </section>
@@ -416,6 +407,7 @@ fetch("stocks.json")
   .then(res => res.json())
   .then(data => {
     mockStocks = data;
+    console.log('mockStocks loaded:', mockStocks);
     buildTable(mockStocks);
   });
   function buildTable(rows){
@@ -484,61 +476,71 @@ const stockSignalsList = document.getElementById('stockSignals');
 const stockValuationDiv = document.getElementById('stockValuation');
 
 function renderAnalysisReport(stock) {
-    if (!stock) {
-        analysisReportContainer.innerHTML = `<div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md text-center text-gray-500">
-            Không tìm thấy báo cáo phân tích cho mã cổ phiếu này. Vui lòng thử lại với mã khác.
-        </div>`;
-        stockSignalsList.innerHTML = `<li>-</li>`;
-        stockValuationDiv.innerHTML = `
-            <div class="flex justify-between font-medium"><span>Mức giá mục tiêu:</span> <span class="text-indigo-500 font-bold">-</span></div>
-            <div class="flex justify-between text-gray-500"><span>Giá trị hiện tại:</span> <span>-</span></div>
-            <div class="flex justify-between text-gray-500"><span>Chiết khấu:</span> <span>-</span></div>
-        `;
-        return;
-    }
-
-    analysisReportContainer.innerHTML = `
-        <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md">
-            <h3 class="text-xl font-bold">${stock.ticker} - ${stock.name}</h3>
-            <p class="text-sm mt-2">${stock.description}</p>
-            <div class="mt-3 text-sm grid grid-cols-2 gap-2">
-                <div>**Market Cap:** ${stock.marketCap.toLocaleString()} Tỷ VND</div>
-                <div>**Ngành:** ${stock.sector}</div>
-                <div>**Giá trị nội tại:** ~${stock.intrinsicValue.toLocaleString()} VND</div>
-                <div>**Khuyến nghị:** <span class="font-bold text-green-500">${stock.recommendation}</span></div>
-            </div>
-        </div>
-        <div class="mt-6 space-y-6">
-            <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md">
-                <h4 class="font-bold text-lg">Phân tích Cơ bản</h4>
-                <p class="mt-2 text-sm text-gray-500">Biểu đồ thể hiện ROE (hiệu quả sử dụng vốn) và tăng trưởng doanh thu trong 5 năm gần nhất.</p>
-                <div class="mt-4"><img src="https://via.placeholder.com/600x250.png?text=Bi%E1%BB%83u+%C4%91%E1%BB%93+ph%C3%A2n+t%C3%ADch+c%C6%A1+b%E1%BA%A3n+c%E1%BB%A7a+${stock.ticker}" alt="Biểu đồ phân tích cơ bản" class="w-full rounded-lg"></div>
-                <p class="mt-4 text-sm font-semibold">Nhận định:</p>
-                <p class="text-sm text-gray-700 dark:text-gray-300">${stock.fundamentalAnalysis}</p>
-            </div>
-            <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md">
-                <h4 class="font-bold text-lg">Phân tích Kỹ thuật</h4>
-                <p class="mt-2 text-sm text-gray-500">Biểu đồ nến của ${stock.ticker} và các chỉ báo kỹ thuật quan trọng.</p>
-                <div class="mt-4"><img src="https://via.placeholder.com/600x250.png?text=Bi%E1%BB%83u+%C4%91%E1%BB%93+ph%C3%A2n+t%C3%ADch+k%E1%BB%B9+thu%E1%BA%ADt+c%E1%BB%A7a+${stock.ticker}" alt="Biểu đồ phân tích kỹ thuật" class="w-full rounded-lg"></div>
-                <p class="mt-4 text-sm font-semibold">Nhận định:</p>
-                <p class="text-sm text-gray-700 dark:text-gray-300">${stock.technicalAnalysis}</p>
-            </div>
-        </div>
-    `;
-
-    stockSignalsList.innerHTML = stock.signals.map(s => `<li>● ${s}</li>`).join('');
-
-    const discountColor = stock.discount >= 0 ? 'text-green-500' : 'text-red-500';
+  console.log('Rendering stock:', stock);
+  if (!stock || !stock.ticker || !stock.name) {
+    analysisReportContainer.innerHTML = `<div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md text-center text-red-500">
+      Dữ liệu không hợp lệ hoặc không tìm thấy cổ phiếu. Vui lòng kiểm tra lại.
+    </div>`;
+    stockSignalsList.innerHTML = `<li>-</li>`;
     stockValuationDiv.innerHTML = `
-        <div class="flex justify-between font-medium"><span>Mức giá mục tiêu:</span> <span class="text-indigo-500 font-bold">${stock.targetPrice.toLocaleString()} VND</span></div>
-        <div class="flex justify-between text-gray-500"><span>Giá trị hiện tại:</span> <span>${stock.currentPrice.toLocaleString()} VND</span></div>
-        <div class="flex justify-between text-gray-500"><span>Chiết khấu:</span> <span class="${discountColor}">${stock.discount.toFixed(1)}%</span></div>
+      <div class="flex justify-between font-medium"><span>Mức giá mục tiêu:</span> <span class="text-indigo-500 font-bold">-</span></div>
+      <div class="flex justify-between text-gray-500"><span>Giá trị hiện tại:</span> <span>-</span></div>
+      <div class="flex justify-between text-gray-500"><span>Chiết khấu:</span> <span>-</span></div>
     `;
+    return;
+  }
+
+  const marketCap = stock.marketCap || 0;
+  const intrinsicValue = stock.intrinsicValue || 0;
+  const targetPrice = stock.targetPrice || 0;
+  const currentPrice = stock.currentPrice || 0;
+  const discount = stock.discount || 0;
+
+  analysisReportContainer.innerHTML = `
+    <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md">
+      <h3 class="text-xl font-bold">${stock.ticker} - ${stock.name}</h3>
+      <p class="text-sm mt-2">${stock.description || 'Không có mô tả'}</p>
+      <div class="mt-3 text-sm grid grid-cols-2 gap-2">
+        <div><strong>Market Cap:</strong> ${(marketCap).toLocaleString()} Tỷ VND</div>
+        <div><strong>Ngành:</strong> ${stock.sector || '-'}</div>
+        <div><strong>Giá trị nội tại:</strong> ~${(intrinsicValue).toLocaleString()} VND</div>
+        <div><strong>Khuyến nghị:</strong> <span class="font-bold text-green-500">${stock.recommendation || '-'}</span></div>
+      </div>
+    </div>
+    <div class="mt-6 space-y-6">
+      <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md">
+        <h4 class="font-bold text-lg">Phân tích Cơ bản</h4>
+        <p class="mt-2 text-sm text-gray-500">Biểu đồ thể hiện ROE (hiệu quả sử dụng vốn) và tăng trưởng doanh thu trong 5 năm gần nhất.</p>
+        <div class="mt-4"><img src="https://via.placeholder.com/600x250.png?text=Bi%E1%BB%83u+%C4%91%E1%BB%93+ph%C3%A2n+t%C3%ADch+c%C6%A1+b%E1%BA%A3n+c%E1%BB%A7a+${stock.ticker}" alt="Biểu đồ phân tích cơ bản" class="w-full rounded-lg"></div>
+        <p class="mt-4 text-sm font-semibold">Nhận định:</p>
+        <p class="text-sm text-gray-700 dark:text-gray-300">${stock.fundamentalAnalysis || 'Không có phân tích'}</p>
+      </div>
+      <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md">
+        <h4 class="font-bold text-lg">Phân tích Kỹ thuật</h4>
+        <p class="mt-2 text-sm text-gray-500">Biểu đồ nến của ${stock.ticker} và các chỉ báo kỹ thuật quan trọng.</p>
+        <div class="mt-4"><img src="https://via.placeholder.com/600x250.png?text=Bi%E1%BB%83u+%C4%91%E1%BB%93+ph%C3%A2n+t%C3%ADch+k%E1%BB%B9+thu%E1%BA%ADt+c%E1%BB%A7a+${stock.ticker}" alt="Biểu đồ phân tích kỹ thuật" class="w-full rounded-lg"></div>
+        <p class="mt-4 text-sm font-semibold">Nhận định:</p>
+        <p class="text-sm text-gray-700 dark:text-gray-300">${stock.technicalAnalysis || 'Không có phân tích'}</p>
+      </div>
+    </div>
+  `;
+
+  stockSignalsList.innerHTML = stock.signals && Array.isArray(stock.signals)
+    ? stock.signals.map(s => `<li>● ${s}</li>`).join('')
+    : `<li>-</li>`;
+
+  const discountColor = (discount >= 0) ? 'text-green-500' : 'text-red-500';
+  stockValuationDiv.innerHTML = `
+    <div class="flex justify-between font-medium"><span>Mức giá mục tiêu:</span> <span class="text-indigo-500 font-bold">${(targetPrice).toLocaleString()} VND</span></div>
+    <div class="flex justify-between text-gray-500"><span>Giá trị hiện tại:</span> <span>${(currentPrice).toLocaleString()} VND</span></div>
+    <div class="flex justify-between text-gray-500"><span>Chiết khấu:</span> <span class="${discountColor}">${(discount).toFixed(1)}%</span></div>
+  `;
 }
 
 searchAnalysisBtn.addEventListener('click', () => {
     const ticker = analysisInput.value.trim().toUpperCase();
     const stock = mockStocks.find(s => s.ticker === ticker);
+    //console.log('Stock found:', stock); 
     renderAnalysisReport(stock);
 });
 analysisInput.addEventListener('keypress', (e) => {
